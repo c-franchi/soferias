@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Define a codificação e a viewport para responsividade -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suas Férias 4.0 - Login</title>
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Seu arquivo de estilos -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <!-- Exemplo de logotipo -->
+      <img src="{{ url_for('static', filename='images/logo.png') }}" class="img-fluid mb-3" alt="Logo Suas Férias">
+      <h4 class="text-center mb-3">Login</h4>
+
+      <!-- Formulário de login -->
+      <form id="loginForm">
+        <div class="mb-3">
+          <label for="usuario" class="form-label">Usuário</label>
+          <input type="text" class="form-control" id="usuario" required>
+        </div>
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha</label>
+          <input type="password" class="form-control" id="senha" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Fazer Login</button>
+      </form>
+
+      <!-- Mensagem de erro/sucesso -->
+      <div id="loginMessage" class="mt-3 text-danger" style="display:none;"></div>
+
+      <!-- Links adicionais (cadastro, esqueci a senha, etc.) -->
+      <div class="mt-3 text-center">
+        <a href="{{ url_for('register') }}">Criar Conta</a> |
+        <a href="#">Esqueci a Senha</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script de login corrigido -->
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

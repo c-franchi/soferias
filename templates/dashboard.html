@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <!-- Meta viewport para responsividade -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Férias 4.0 - Dashboard</title>
+  <!-- CSS customizado para o dashboard -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <!-- Bootstrap CSS via CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+  <!-- Navbar para mobile -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark d-md-none">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <a class="navbar-brand" href="#">Férias 4.0</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#sidebarMenu" aria-controls="sidebarMenu"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Sidebar colapsável para mobile -->
+  <div class="collapse" id="sidebarMenu">
+    <div class="bg-light p-4">
+      <div class="d-flex align-items-center">
+        <img src="{{ profile_pic_path }}" alt="Supervisor" class="rounded-circle me-3 profile-pic" width="70">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ url_for('dashboard') }}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('profile') }}">Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('marcar_ferias') }}">Marcar Férias</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('relatorio') }}">Relatório</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout principal -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar fixa para desktop -->
+      <nav class="col-md-3 col-lg-2 d-none d-md-block bg-dark sidebar position-fixed">
+        <div class="sidebar-sticky">
+          <h2 class="text-center text-white my-4">Meu Perfil</h2>
+          <div class="text-center mb-4">
+            <img src="{{ profile_pic_path }}" alt="Supervisor" class="rounded-circle profile-pic" width="100">
+          </div>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active text-white" href="{{ url_for('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{{ url_for('profile') }}">Perfil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{{ url_for('marcar_ferias') }}">Marcar Férias</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{{ url_for('relatorio') }}">Relatório</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{{ url_for('logout') }}">Logout</a>
+            </li>
+            <li class="nav-item">
+              <button class="btn btn-danger w-100 mt-2" onclick="confirmarExclusao()">
+                Excluir Todos os Agendamentos
+              </button>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="col"></div> <!-- Espaço compensando a sidebar -->
+
+      <!-- Conteúdo principal -->
+      <div class="col-md-8 ms-sm-auto col-lg-9 px-4 offset-md-3 offset-lg-2">
+        <main role="main" class="d-flex justify-content-center flex-column">
+          <!-- Cabeçalho do Dashboard -->
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h3 me-3">Dashboard</h1>
+        <div>
+          <p class="mb-0">Total de Agendamentos: {{ total_agendamentos }}</p>
+        </div>
+      </div>
+
+
+          <!-- Área de Gráficos -->
+          <div class="dashboard-content bg-light p-4 rounded">
+            <!-- Se não houver agendamentos, exibe mensagem; caso contrário, exibe o gráfico -->
+            <div class="chart-container" id="chartContainer">
+              <h4>Agendamentos de Férias por Área e Mês</h4>
+              <canvas id="feriasChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Tabela de Pedidos de Aprovação -->
+          <div class="mt-4">
+            <h4>Pedidos de Aprovação</h4>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Data de Início</th>
+                  <th>Dias</th>
+                  <th>Status</th>
+                  <th>Data do Pedido</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for pedido in pedidos_aprovacao %}
+                <tr>
+                  <td>{{ pedido[1] }}</td>  <!-- Nome do funcionário -->
+                  <td>{{ pedido[2] }}</td>  <!-- Data de Início -->
+                  <td>{{ pedido[3] }}</td>  <!-- Dias -->
+                  <td>{{ pedido[4] }}</td>  <!-- Status -->
+                  <td>{{ pedido[5] }}</td>  <!-- Data do Pedido -->
+                  <td>
+                    <button class="btn btn-success" onclick="aprovarPedido('{{ pedido[0] }}')">Aprovar</button>
+                    <button class="btn btn-danger" onclick="rejeitarPedido('{{ pedido[0] }}')">Rejeitar</button>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              
+            </table>
+          </div>
+
+          <!-- Área para o link de marcar férias -->
+          <div class="mt-4">
+            <h4>Link para Marcar Férias</h4>
+            <div class="input-group mb-3">
+              <input type="text" id="feriasLink" class="form-control" value="{{ url_for('marcar_ferias', _external=True) }}" readonly>
+              <button class="btn btn-primary" id="copyLinkButton">Copiar Link</button>
+            </div>
+            <div id="copyMessage" class="text-success" style="display: none;">
+              Link copiado para a área de transferência!
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para confirmar exclusão de todos os agendamentos -->
+  <div class="modal fade" id="confirmarExclusaoModal" tabindex="-1" aria-labelledby="confirmarExclusaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmarExclusaoModalLabel">Confirmar Exclusão</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Tem certeza de que deseja excluir todos os registros de agendamento?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" onclick="excluirAgendamentos()">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: Bootstrap, Chart.js, SweetAlert2 e dashboard.js -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  <script>
+    // Função para exibir o modal de exclusão
+    function confirmarExclusao() {
+      const modal = new bootstrap.Modal(document.getElementById('confirmarExclusaoModal'));
+      modal.show();
+    }
+  </script>
+</body>
+</html>

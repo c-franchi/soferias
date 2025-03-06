@@ -1,0 +1,63 @@
+/*
+  Arquivo: style.css
+  ------------------
+  Este arquivo contém estilos para as telas de login, cadastro e troca de senha.
+  Inclui um fundo com a imagem "fundo_novo.png" e configurações para que o
+  formulário (card) se ajuste melhor em dispositivos móveis, exibindo-o maior.
+*/
+
+/* 1) Reseta margens e preenchimentos e define altura mínima */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Garante que o body ocupe ao menos a altura da tela */
+  }
+  
+  /* 2) Define o fundo da página com a imagem, cobrindo a área */
+  body {
+    /* Removemos o "fixed" para melhor compatibilidade em mobile */
+    background: url("../images/fundo_novo.png") no-repeat center center;
+    background-size: cover;
+    background-attachment: scroll; /* ou "initial" para evitar problemas no mobile */
+  }
+  
+  /* 3) Container flex que centraliza vertical e horizontalmente */
+  .container {
+    min-height: 100vh;    /* Ocupa a tela inteira */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 05px;        /* Pequeno padding para não encostar nas bordas em telas bem estreitas */
+    box-sizing: border-box;
+  }
+  
+  /* 4) Card que contém o formulário */
+  .card {
+    background: rgba(255, 255, 255, 0.9); /* Fundo branco semitransparente */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;         /* Ocupa toda a largura disponível do container */
+    max-width: 500px;    /* Largura máxima aumentada para 500px em telas maiores */
+    box-sizing: border-box;
+  }
+  
+  /* 5) Ajustes específicos para telas bem pequenas */
+  @media (max-width: 576px) {
+    .card {
+      max-width: 95%;   /* Em telas pequenas, pode chegar a 95% da largura */
+      margin: 0 auto;   /* Centraliza horizontalmente */
+      padding: 20px;    /* Aumenta um pouco o padding para dar mais espaço interno */
+    }
+  }
+  
+  /* 6) Espaçamento padrão para inputs */
+  input.form-control {
+    margin-bottom: 15px;
+  }
+  
+  /* 7) Botões */
+  button.btn {
+    font-weight: bold;
+  }
+  

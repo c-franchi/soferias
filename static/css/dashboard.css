@@ -1,0 +1,24 @@
+/*
+  dashboard.css
+  -------------
+  Define estilos para o layout do Dashboard, incluindo a sidebar fixa,
+  a área de gráficos, e pequenas customizações.
+*/
+
+/* Sidebar */
+.sidebar {
+    height: 100vh;
+  }
+  
+  /* Espaço para as divs que contêm gráficos (chart-container) */
+  .chart-container {
+    position: relative;
+    height: 300px; /* Ajuste conforme necessário */
+    width: 100%;
+  }
+  
+  /* Ajustes gerais de layout */
+  .dashboard-content {
+    margin-bottom: 2rem;
+  }
+  

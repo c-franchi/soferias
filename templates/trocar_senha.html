@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suas Férias 4.0 - Trocar Senha</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" class="img-fluid mb-3" alt="Logo Suas Férias">
+    <h4 class="text-center mb-3">Trocar Senha</h4>
+    <form id="trocarSenhaForm">
+      <div class="mb-3">
+        <label for="nova_senha" class="form-label">Nova Senha</label>
+        <input type="password" class="form-control" id="nova_senha" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Atualizar Senha</button>
+    </form>
+    <div id="trocarSenhaMessage" class="mt-3" style="display:none;"></div>
+    <div class="mt-3 text-center">
+      <a href="{{ url_for('logout') }}">Sair</a>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Exemplo simples de envio da nova senha via fetch
+  document.getElementById('trocarSenhaForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const novaSenha = document.getElementById('nova_senha').value;
+
+    fetch('/trocar_senha', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ nova_senha: novaSenha })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const msgDiv = document.getElementById('trocarSenhaMessage');
+      msgDiv.style.display = 'block';
+      msgDiv.textContent = data.message;
+      if (data.success) {
+        msgDiv.classList.remove('text-danger');
+        msgDiv.classList.add('text-success');
+      } else {
+        msgDiv.classList.remove('text-success');
+        msgDiv.classList.add('text-danger');
+      }
+    })
+    .catch(error => console.error(error));
+  });
+</script>
+</body>
+</html>

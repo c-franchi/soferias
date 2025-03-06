@@ -1,0 +1,49 @@
+/*
+  marcar_ferias.css
+  -----------------
+  Este arquivo define os estilos para a página de agendamento de férias (marcar_ferias.html).
+  Ele configura um fundo para a página e estiliza o formulário e seus elementos para uma boa leitura.
+*/
+
+/* Garante que html e body ocupem toda a altura, removendo margens e padding */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  /* Define o fundo da página utilizando a imagem 'fundo_novo.png'.
+     Ajuste o caminho conforme a estrutura de diretórios. */
+  body {
+    background: url("../images/fundo_novo.png") no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  /* Container principal para centralizar o conteúdo e dar espaçamento */
+  .container {
+    padding: 20px;
+  }
+  
+  /* Estiliza o formulário de agendamento */
+  form {
+    background-color: rgba(255, 255, 255, 0.95); /* Fundo branco semitransparente para melhor leitura */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilização para rótulos e campos de entrada */
+  .form-label {
+    font-weight: 600;
+  }
+  .form-control {
+    margin-bottom: 15px;
+  }
+  
+  /* Botões com espaçamento extra */
+  .btn {
+    margin-top: 10px;
+  }
+  
+  /* Estilos para o modal (se necessário, mas o Bootstrap já fornece o padrão) */
+
