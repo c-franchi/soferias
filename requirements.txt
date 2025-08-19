@@ -1,5 +1,5 @@
-Flask==2.2.3
-Werkzeug==2.2.3
-pandas
-openpyxl
-xhtml2pdf
+Flask==3.1.1
+Werkzeug==3.1.3
+pandas==2.3.1
+openpyxl==3.1.5
+xhtml2pdf==0.2.17

@@ -46,6 +46,7 @@ from modules.dashboard_manager import DashboardManager
 from modules.employee_db import EmployeeDB
 from datetime import datetime
 from jinja2 import Undefined
+import re
 
 
 # Definição da função para converter HTML em PDF (definida inline para evitar problemas de importação)
@@ -60,8 +61,13 @@ def html_to_pdf(source_html):
 
 # Criação da aplicação Flask e configuração da chave secreta
 app = Flask(__name__)
-# Chave secreta agora vem de variável de ambiente ou valor padrão seguro
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'chave_super_secreta_troque_isto')
+if os.environ.get("FLASK_ENV") == "production":
+    key = os.environ.get("FLASK_SECRET_KEY")
+    if not key:
+        raise RuntimeError("FLASK_SECRET_KEY não definido em produção.")
+    app.secret_key = key
+else:
+    app.secret_key = os.environ.get("FLASK_SECRET_KEY", "DEV_ONLY__troque_isto")
 
 # Limite de tamanho de upload (exemplo: 2MB)
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024  # 2MB
@@ -129,7 +135,8 @@ def login():
         session["usuario"] = usuario
 
         # Define o arquivo de banco de dados exclusivo para este usuário
-        db_filename = f"gestor_{usuario}_funcionarios.db"
+        safe_user = re.sub(r'[^a-zA-Z0-9_-]+', '_', usuario)
+        db_filename = f"gestor_{safe_user}_funcionarios.db"
         session["employee_db"] = db_filename
 
         # Se o arquivo de banco não existir, cria as tabelas necessárias
@@ -836,4 +843,4 @@ def gerar_pdf():
 # EXECUÇÃO DO SERVIDOR FLASK
 # ------------------------------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()  # Não use debug=True em produção
